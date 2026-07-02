@@ -1,5 +1,9 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
+
+// connectDB
+const connectDB = require('./db/connect');
 
 // routers
 const viewRouter = require('./routes/view');
@@ -19,6 +23,7 @@ const port = process.env.PORT || 3001;
 
 const start = async () => {
       try {
+            connectDB(process.env.MONGO_URI);
             app.listen(port, () => {
                   console.log(`Server is listening to port ${port}`);
             });
