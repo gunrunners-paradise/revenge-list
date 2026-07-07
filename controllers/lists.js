@@ -1,29 +1,62 @@
+const asyncHandler = require('express-async-handler');
+const List = require('../models/List');
+const {StatusCodes} = require('http-status-codes');
 
-const getAllLists = async (req,res) => {
-      res.send('get all lists');
+const getAllLists = asyncHandler(async (req,res) => {
+      const lists = await List
+      .find({createdBy: req.user.userId})
+      .sort('createdAt');
+      res.status(StatusCodes.OK).json({count:lists.length, lists});
       
-};
+});
 
-const getList = async (req,res) => {
-      const {id} = req.params;
-      res.send(`get list. Params: ${id}`);
+const getList = asyncHandler(async (req,res) => {
+      const {user: {userId}, params: {id: listId}} = req;
+      const list = await List.findOne({
+            _id: listId,
+            createdBy: userId
+      });
+      if (!list) {
+            res.status(StatusCodes.BAD_REQUEST)
+            .json({msg: `No list with the id ${listId}`});
+      }
       
-};
+      res.status(StatusCodes.OK).json({list});
+      
+});
 
-const createList = async (req,res) => {
-      res.send('create list');
+const createList = asyncHandler(async (req,res) => {
+      req.body.createdBy = req.user.userId;
+      const list = await List.create(req.body);
+      res.status(StatusCodes.OK).json({list});
       
-};
+});
 
 const updateList = async (req,res) => {
-      const {id} = req.params;
-      res.send(`update list. Params: ${id}`);
+      const {
+            body: {name,offense,revenge_plan,severity,status,due_date},
+            user: {userId},
+            params: {id:listId}
+      } = req;
+      if (name === '' || offense === '' || revenge_plan === '' ||
+            !severity ||status === '' || due_date === '') {
+                  res.status(StatusCodes.BAD_REQUEST)
+                  .json({msg: 'Fields cannot be empty'});
+      }
+      res.send(`update list. Params: ${JSON.stringify(req.body)}`);
       
 };
 
 const deleteList = async (req,res) => {
-      const {id} = req.params;
-      res.send(`delete list. Params: ${id}`);
+      const {user: {userId}, params: {id:listId}} = req;
+      const list = await List
+      .findByIdAndDelete({_id: listId,createdBy:userId});
+      if (!list) {
+            res.status(StatusCodes.BAD_REQUEST)
+            .json({msg: `No list with the id ${listId}`});
+      }
+      res.status(StatusCodes.OK)
+      .json({msg: "Deleted successfully"});
       
 };
 
