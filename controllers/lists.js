@@ -39,11 +39,24 @@ const updateList = async (req,res) => {
             params: {id:listId}
       } = req;
       if (name === '' || offense === '' || revenge_plan === '' ||
-            !severity ||status === '' || due_date === '') {
+            severity === undefined || status === '' || due_date === '') {
                   res.status(StatusCodes.BAD_REQUEST)
                   .json({msg: 'Fields cannot be empty'});
       }
-      res.send(`update list. Params: ${JSON.stringify(req.body)}`);
+      if (!name || !offense || !revenge_plan ||
+            !severity || !status || !due_date) {
+                  res.status(StatusCodes.BAD_REQUEST)
+                  .json({msg: 'Fields cannot be empty'});
+      }
+      const list = await List.findOneAndUpdate({
+            _id: listId,
+            createdBy: userId
+      }, req.body, {new:true,runValidators:true});
+      if (!list) {
+            res.status(StatusCodes.NOT_FOUND)
+            .json({msg: `No job with the id ${listId}`});
+      }
+      res.status(StatusCodes.OK).json({list});
       
 };
 
