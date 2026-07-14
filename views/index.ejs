@@ -1,8 +1,15 @@
 <%- include('partials/header') %>
 <main>
-<%- include('partials/login') %>
+<script>
+      const token = localStorage.getItem('token');
+      if (token) {
+            window.location.href = '/lists';
+      }
+</script>
+      <%- include('partials/login') %>
 </main>
 <script src="./js/axios.min.js"></script>
+<script src="./js/login.js"></script>
 
 
 <%- include('partials/footer') %>
