@@ -10,4 +10,10 @@ const lists = (req,res) => {
       });
 };
 
-module.exports = {index, lists};
+const create = (req,res) => {
+      res.render('create', {
+            title: 'Revenge App'
+      });
+};
+
+module.exports = {index, lists, create};

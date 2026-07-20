@@ -27,9 +27,26 @@ async function submitEdit(id) {
             }
             
       });
+      loadLists();
+      
+      
+}
+
+async function submitDelete(id) {
+
+      const {data} = await axios.delete(`/api/v1/lists/${id}`,
+            {
+            headers: {
+                  Authorization: `Bearer ${getToken}`
+            }
+            
+      });
+      console.log(data);
+      loadLists();
       if (!data.msg) {
-            loadLists();
+            //
       }
+      
       
       
 }
@@ -43,7 +60,8 @@ async function loadEdit(id) {
       });
       console.log(data.list);
       listsContainer.innerHTML = `
-                  <form class="form-edit">
+                  <button onclick="loadLists()">Back</button><br>
+                  <form class="form form-edit">
                   <label for="due_date">Due Date:</label>
                   <input type="date" class="ldate" value="${data.list.due_date}"><br>
                   <label for="name">Name:</label>
@@ -67,7 +85,8 @@ async function loadEdit(id) {
                         <option value="Abandoned" ${data.list.status === 'Abandoned' ? 'selected' : ''}>Abandoned</option>
                   </select>
                   </form>
-                  <button onclick="submitEdit('${data.list._id}')">edit</button>`;
+                  <button class="submit" onclick="submitEdit('${data.list._id}')">edit</button>
+                  <button class="delete" onclick="submitDelete('${data.list._id}')">delete</button>`;
 }
 
 async function loadLists() {

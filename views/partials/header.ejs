@@ -8,9 +8,24 @@
             <title><%= title %></title>
       </head>
       <body>
-            <nav>
+            <div class="nav">
                   <h1><%= title %></h1>
-                  <ul>
-                        <li><a href="/">Home</a></li>
-                  </ul>
-            </nav>
+            </div>
+            <script>
+                  function logout() {
+                        localStorage.removeItem('token');
+                        window.location.href = '/';
+                  }
+                  const token1 = localStorage.getItem('token');
+                  if (token1) {
+                        document.querySelector('.nav').innerHTML += `
+                        <nav>
+                              <ul>
+                                    <li><a href="/">Home</a></li>
+                                    <li><a href="/create">Add New</a></li>
+                                    <li><a href="#" onClick="logout()">Logout</a></li>
+                              </ul>
+                        </nav>`
+                  }
+            </script>
+            

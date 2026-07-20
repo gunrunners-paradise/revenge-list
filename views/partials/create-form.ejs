@@ -1,0 +1,30 @@
+<div class="lists-container">
+      <a href="/lists"><button>Back</button></a><br>
+      <form class="form form-create">
+            <label for="due_date">Due Date:</label>
+            <input type="date" class="ldate"><br>
+            <label for="name">Name:</label>
+            <input type="text" class="lname"><br>
+            <label for="offense">Offense:</label>
+            <textarea class="loffense"></textarea><br>
+            <label for="revenge_plan">Revenge Plan:</label>
+            <textarea class="lplan"></textarea><br>
+            <label for="severity">Severity:</label>
+            <select name="severity" class="lseverity">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+            </select><br>
+            <select name="status" class="lstatus">
+                  <option value="Planning">Planning</option>
+                  <option value="Approved">Approved</option>
+                  <option value="Executed">Executed</option>
+                  <option value="Abandoned">Abandoned</option>
+            </select>
+      </form>
+      <button class="submit" onclick="createList()">create</button>
+</div>
+<script src="./js/axios.min.js"></script>
+<script src="./js/create.js"></script>
