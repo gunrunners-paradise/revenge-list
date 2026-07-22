@@ -5,7 +5,8 @@ const errorHandlerMiddleware = (err,req,res,next) => {
       let CustomError = {
             // set default
             statusCode: err.statusCode || StatusCodes.INTERNAL_SERVER_ERROR,
-            msg: err.message || 'Something went wrong try again later'
+            msg: err.message || err.msg || 'Something went wrong try again later',
+            error: true
       };
 
       if (err.name === 'ValidationError') {
@@ -19,8 +20,13 @@ const errorHandlerMiddleware = (err,req,res,next) => {
       }
 
       if (err.name === 'CastError') {
-            CustomError.msg = `No item found with the id: ${err.value}`;
+            CustomError.msg = `No item found with the id: ${err.value._id || err.value}`;
             CustomError.statusCode = StatusCodes.NOT_FOUND;
+      }
+
+      if (err.type === 'entity.parse.failed') {
+            CustomError.msg = "Could not parse the incoming JSON because the client sent malformed JSON.";
+            CustomError.statusCode = StatusCodes.BAD_REQUEST;
       }
 
       // return res.status(CustomError.statusCode).json({err});

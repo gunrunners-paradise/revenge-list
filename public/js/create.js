@@ -12,7 +12,6 @@ async function createList() {
       const plan = document.querySelector('.lplan').value;
       const severity = document.querySelector('.lseverity').value;
       const status = document.querySelector('.lstatus').value;
-
       const {data} = await axios.post(`/api/v1/lists`, {
             "name": name,
             "offense": offense,
@@ -27,13 +26,11 @@ async function createList() {
             }
             
       });
-      window.location.href = '/lists';
-      if (!data) {
-            // 
-            console.log('not created');
-            
-      }
       console.log(data);
+      if (!data.error) {
+            window.location.href = '/lists';
+      }
+      
       
       
 }

@@ -48,7 +48,6 @@ start();
 /*
 upcoming features:
 signup user function
-proper bug report
 add bug output on frontend: editing list, new list, can't load lists, etc
 give it a proper UI design
  */

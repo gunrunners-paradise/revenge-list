@@ -27,7 +27,9 @@ async function submitEdit(id) {
             }
             
       });
-      loadLists();
+      if (!data.error) {
+            loadLists();
+      }
       
       
 }
@@ -42,10 +44,11 @@ async function submitDelete(id) {
             
       });
       console.log(data);
-      loadLists();
-      if (!data.msg) {
-            //
+      if (!data.error) {
+            loadLists();
       }
+      
+      
       
       
       
@@ -53,14 +56,15 @@ async function submitDelete(id) {
 
 async function loadEdit(id) {
       reset();
-      const {data} = await axios.get(`/api/v1/lists/${id}`, {
+
+      try {
+                  const {data} = await axios.get(`/api/v1/lists/${id}`, {
             headers: {
                   Authorization: `Bearer ${getToken}`
             }
       });
-      console.log(data.list);
       listsContainer.innerHTML = `
-                  <button onclick="loadLists()">Back</button><br>
+                  <a href="#" onclick="loadLists()">Back</a><br>
                   <form class="form form-edit">
                   <label for="due_date">Due Date:</label>
                   <input type="date" class="ldate" value="${data.list.due_date}"><br>
@@ -87,6 +91,10 @@ async function loadEdit(id) {
                   </form>
                   <button class="submit" onclick="submitEdit('${data.list._id}')">edit</button>
                   <button class="delete" onclick="submitDelete('${data.list._id}')">delete</button>`;
+      } catch (error) {
+            loadLists();
+      }
+
 }
 
 async function loadLists() {
@@ -99,16 +107,19 @@ async function loadLists() {
             });
 
             console.log(data.lists);
-            listsContainer.innerHTML += data.lists.map(list => `
-                  <div class="list-card">
-                  <p>Due Date: ${list.due_date}</p>
-                  <p>Name: ${list.name}</p>
-                  <p>Offense: ${list.offense}</p>
-                  <p>Revenge Plan: ${list.revenge_plan}</p>
-                  <p>Severity: ${list.severity}</p>
-                  <p>status: ${list.status}</p>
-                  <button onclick="loadEdit('${list._id}')">edit</button>
-                  </div>`).join(' ');
+            if (!data.error) {
+
+                  listsContainer.innerHTML += data.lists.map(list => `
+                        <div class="list-card">
+                        <p>Due Date: ${list.due_date}</p>
+                        <p>Name: ${list.name}</p>
+                        <p>Offense: ${list.offense}</p>
+                        <p>Revenge Plan: ${list.revenge_plan}</p>
+                        <p>Severity: ${list.severity}</p>
+                        <p>status: ${list.status}</p>
+                        <button onclick="loadEdit('${list._id}')">edit</button>
+                        </div>`).join(' ');
+            }
 
 }
 
