@@ -1,7 +1,7 @@
 const formDOM = document.querySelector('.form');
 const emailInputDOM = document.querySelector('.email-input');
 const passwordInputDOM = document.querySelector('.password-input');
-const formAlertDOM = document.querySelector('.form-alert');
+const formAlertDOM = document.querySelector('.error');
 
 formDOM.addEventListener('submit', async (e) => {
       formAlertDOM.classList.remove('text-success');
@@ -22,6 +22,7 @@ formDOM.addEventListener('submit', async (e) => {
             passwordInputDOM.value = '';
 
             localStorage.setItem('token', data.token);
+            localStorage.setItem('user_name', data.user);
             window.location.href = '/lists';
       } catch (error) {
             formAlertDOM.style.display = 'block';
