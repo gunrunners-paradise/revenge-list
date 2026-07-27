@@ -28,6 +28,8 @@ formDOM.addEventListener('submit', async (e) => {
       } catch (error) {
             formAlertDOM.style.display = 'block';
             formAlertDOM.textContent = 'Registration Failed!';
+            localStorage.removeItem('token');
+            localStorage.removeItem('user_name');
             console.log(error);
       }
 });

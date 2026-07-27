@@ -28,6 +28,7 @@ formDOM.addEventListener('submit', async (e) => {
             formAlertDOM.style.display = 'block';
             formAlertDOM.textContent = 'Login Failed!';
             localStorage.removeItem('token');
+            localStorage.removeItem('user_name');
             console.log(error);
       }
 });
